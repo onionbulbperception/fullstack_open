@@ -19,6 +19,8 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  // https://stackoverflow.com/questions/20222501/how-to-create-a-zero-filled-javascript-array-of-arbitrary-length/22209781
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
   const handleNextAnecdote = () => {
@@ -26,9 +28,17 @@ const App = () => {
     setSelected(random)
   }
 
+  const handleVote = () => {
+    const updateVotes = [...votes]
+    updateVotes[selected] += 1
+    setVotes(updateVotes)
+  }
+
   return (
     <div>
       {anecdotes[selected]}<br/>
+      has {votes[selected]} votes<br/>
+      <Button onClick={handleVote} text='vote'/>
       <Button onClick={handleNextAnecdote} text='next anecdote'/>
     </div>
   )
