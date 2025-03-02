@@ -14,15 +14,23 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
-const Stats = (props) => {
+const Statistics = (props) => {
+  if (props.good || props.neutral || props.bad < 0) {
+    return (
+      <div>
+        <p>
+          good {props.good}<br/>
+          neutral {props.neutral}<br/>
+          bad {props.bad}<br/>
+          all {props.total}<br/>
+          average {props.average}<br/>
+          positive {props.positive} %
+        </p>
+     </div>
+    )
+  }
   return (
-    <div>
-      <p>
-        good {props.good} <br/>
-        neutral {props.neutral} <br/>
-        bad {props.bad}
-      </p>
-    </div>
+    <div>No feedback given</div>
   )
 }
 
@@ -36,20 +44,31 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const [total, setTotal] = useState(0)
+
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator
+  const average = total > 0 ? (good - bad) / total : 0
+  const positive = total > 0 ? (good / total) * 100 : 0
 
   const handleGoodClick = () => {
-    setGood(good + 1)
+    const updatedGood = good + 1
+    setGood(updatedGood)
     //console.log(good)
+    setTotal(updatedGood + neutral + bad)
   }
 
   const handleNeutralClick = () => {
-    setNeutral(neutral + 1)
+    const updatedNeutral = neutral + 1
+    setNeutral(updatedNeutral)
     //console.log(neutral)
+    setTotal(good + updatedNeutral + bad)
   }
 
   const handleBadClick = () => {
-    setBad(bad + 1)
+    const updatedBad = bad + 1
+    setBad(updatedBad)
     //console.log(bad)
+    setTotal(good + neutral + updatedBad)
   }
 
   return (
@@ -62,7 +81,7 @@ const App = () => {
 
       <Header header={headers.stats}/>
 
-      <Stats good={good} neutral={neutral} bad={bad}/>
+      <Statistics good={good} neutral={neutral} bad={bad} total={total} average={average} positive={positive}/>
     </div>
   )
 }
