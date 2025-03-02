@@ -4,20 +4,8 @@ This repository contains the exercises completed as part of the Full Stack Open 
 
 ## Course Contents
 
-## How to navigate in this repository:
-1. Clone the repository using the web URL:
-    ```bash
-    git clone git@github.com:your-username/fullstack_open.git
-    ```
-
-    **or**
-
-    Using password-protected SHH key:
-    ```bash
-    git@github.com:your-username/fullstack_open.git
-    ```
-2. Navigate to the relevant project folder.
-3. Follow the README file in the folder for instructions on running the code.
+0. Fundamentals of Web apps
+1. Introduction to React
 
 ## File structure:
 
@@ -27,6 +15,9 @@ This repository contains the exercises completed as part of the Full Stack Open 
 |   ├── new_note_single_app_diagram.md     # 0.5: Single page app diagram
 |   └── single_page_app_diagram.md         # 0.6: New note in Single page app diagram
 |-- part1/                                 # Directory that contains tasks from part 1
+|   ├── anecdotes/                         # Contains tasks 1.12 - 1.13
+|   ├── courseinfo/                        # Contains tasks 1.1 - 1.5
+|   └── unicafe/                           # Contains tasks 1.6 - 1.11
     
 ```
 
