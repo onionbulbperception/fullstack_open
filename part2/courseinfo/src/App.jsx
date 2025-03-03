@@ -3,6 +3,7 @@ const Course = ({ course }) => {
     <div>
       <Header name={course.name}/>
       <Content parts={course.parts}/>
+      <Statistics parts={course.parts} />
     </div>
   )
 }
@@ -29,6 +30,19 @@ const Part = ({ part }) => {
   )
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+const Statistics = ({ parts }) => {
+  const initialValue = 0
+  
+  return (
+    <strong>
+      <p>
+        total of {parts.reduce((sum, part) => {return sum + part.exercises}, initialValue)} exercises
+      </p>
+      </strong>
+  )
+}
+
 const App = () => {
   const course = {
     id: 1,
@@ -48,6 +62,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
