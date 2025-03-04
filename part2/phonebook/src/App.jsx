@@ -13,6 +13,15 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+    if (persons.find(person => person.name === newName)) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Window/alert
+      alert(`${newName} is already added to phonebook`)
+      setNewName('')
+      return
+    }
+
     const personObject = {
       name: newName,
     }
