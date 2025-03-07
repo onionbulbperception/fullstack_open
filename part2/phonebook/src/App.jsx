@@ -59,7 +59,21 @@ const App = () => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
+      }).catch(error =>{
+        console.log('operation failed')
       })
+  }
+
+  const removePerson = (id) => {
+    const person = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      console.log('deleted', person.name, id)
+      personService.remove(id).then(response => {
+        setPersons(persons.filter(person => person.id !== id))
+      }).catch(response => {
+        console.log('the person could not be removed')
+      })
+    }
   }
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
@@ -75,7 +89,7 @@ const App = () => {
       <PersonForm name={newName} nameHandler={handleNameChange} number={newNumber} 
                   numberHandler={handleNumberChange} addPersonHandler={addPerson}/>
       <h3>Numbers</h3>
-      <Persons persons={personsToShow}/>
+      <Persons persons={personsToShow} removePerson={removePerson}/>
     </div>
   )
 }
