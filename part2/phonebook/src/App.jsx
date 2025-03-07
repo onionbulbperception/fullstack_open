@@ -1,37 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-
-const Persons = ({persons}) => {
-  return (
-    persons.map(person =>
-      <p key={person.name}>{person.name} {person.number}</p>
-    )
-  )
-}
-
-const Filter = ({filter, changeFilterChanges}) => {
-  return (
-    <form>
-      <div>
-        filter shown with <input value={filter} onChange={changeFilterChanges}></input>
-      </div>
-    </form>
-  )
-}
-
-const PersonForm = ({name, nameHandler, number, numberHandler, addPersonHandler}) => {
-  return (
-    <form>
-      <div>
-        name: <input value={name} onChange={nameHandler}/> <br/>
-        number: <input value={number} onChange={numberHandler}></input>
-      </div>
-      <div>
-        <button type="submit" onClick={addPersonHandler}>add</button>
-      </div>
-    </form>
-  )
-}
+import Persons from './components/Persons'
+import PersonForm from './components/PersonsForm'
+import Filter from './components/Filter'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -40,15 +11,12 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    //console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
-        //console.log('promise fulfilled')
         setPersons(response.data)
       })
-    }, [])
-    //console.log('render', persons.length, 'notes')
+  }, [])
 
   const handleNameChange = (event) => {
     //console.log(event.target.value)
@@ -86,10 +54,8 @@ const App = () => {
     setNewName('')
     setNewNumber('')
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
+    personService.create(personObject)
       .then(response => {
-        console.log(response)
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
@@ -104,7 +70,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter filter={filter} changeFilterChanges={handleFilterChanges}/>
+      <Filter value={filter} onChange={handleFilterChanges}/>
       <h3>add a new</h3>
       <PersonForm name={newName} nameHandler={handleNameChange} number={newNumber} 
                   numberHandler={handleNumberChange} addPersonHandler={addPerson}/>
