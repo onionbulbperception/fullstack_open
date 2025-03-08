@@ -3,12 +3,14 @@ import Persons from './components/Persons'
 import PersonForm from './components/PersonsForm'
 import Filter from './components/Filter'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -58,6 +60,12 @@ const App = () => {
     personService.create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
+
+        setMessage(`Added ${response.data.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+
         setNewName('')
         setNewNumber('')
       }).catch(error =>{
@@ -72,7 +80,8 @@ const App = () => {
       personService.remove(id).then(response => {
         setPersons(persons.filter(person => person.id !== id))
       }).catch(response => {
-        console.log('the person could not be removed')
+        setMessage(`Error: Information of ${person.name} has already been removed from server`)
+        //console.log('the person could not be removed')
       })
     }
   }
@@ -87,7 +96,8 @@ const App = () => {
           setPersons(persons.map(person => person.id !== id ? person : response.data))
           console.log('updated', person.name, id)
         }).catch(error => {
-          alert(`${person.name} was deleted from persons`)
+          setMessage(`Error: Information of ${person.name} has already been removed from server`)
+          //alert(`${person.name} was deleted from persons`)
           setPersons(persons.filter(person => person.id !== id))
         })
     }
@@ -101,6 +111,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter value={filter} onChange={handleFilterChanges}/>
       <h3>add a new</h3>
       <PersonForm name={newName} nameHandler={handleNameChange} number={newNumber} 
