@@ -6,6 +6,8 @@ This repository contains the exercises completed as part of the Full Stack Open 
 
 0. Fundamentals of Web apps
 1. Introduction to React
+2. Communicating with server
+3. Programming a server with NodeJS and Express
 
 ## File structure:
 
@@ -18,6 +20,10 @@ This repository contains the exercises completed as part of the Full Stack Open 
 |   ├── anecdotes/                         # Contains tasks 1.12 - 1.13
 |   ├── courseinfo/                        # Contains tasks 1.1 - 1.5
 |   └── unicafe/                           # Contains tasks 1.6 - 1.11
+|-- part2/                                 # Directory that contains tasks from part 2
+|   ├── countries/                         # Contains tasks 2.18 - 2.19
+|   ├── courseinfo/                        # Contains tasks 2.1 - 2.5
+|   └── phonebook/                         # Contains tasks 2.6 - 2.17
     
 ```
 
