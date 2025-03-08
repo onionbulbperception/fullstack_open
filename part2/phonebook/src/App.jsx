@@ -68,7 +68,7 @@ const App = () => {
 
         setNewName('')
         setNewNumber('')
-      }).catch(error =>{
+      }).catch(error => {
         console.log('operation failed')
       })
   }
@@ -81,6 +81,9 @@ const App = () => {
         setPersons(persons.filter(person => person.id !== id))
       }).catch(response => {
         setMessage(`Error: Information of ${person.name} has already been removed from server`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
         //console.log('the person could not be removed')
       })
     }
@@ -97,6 +100,9 @@ const App = () => {
           console.log('updated', person.name, id)
         }).catch(error => {
           setMessage(`Error: Information of ${person.name} has already been removed from server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
           //alert(`${person.name} was deleted from persons`)
           setPersons(persons.filter(person => person.id !== id))
         })
