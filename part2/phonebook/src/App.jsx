@@ -39,7 +39,8 @@ const App = () => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
     if (persons.find(person => person.name === newName)) {
       // https://developer.mozilla.org/en-US/docs/Web/API/Window/alert
-      alert(`${newName} is already added to phonebook`)
+      //alert(`${newName} is already added to phonebook`)
+      updateNumber(persons.find(person => person.name === newName).id, newNumber)
       setNewName('')
       setNewNumber('')
       return
@@ -76,10 +77,26 @@ const App = () => {
     }
   }
 
+  const updateNumber = (id, newNumber) => {
+    const person = persons.find(person => person.id === id)
+    const changedPerson = {...person, number: newNumber}
+    if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
+      console.log(person.name, id, 'will be updated')
+      personService.update(id, changedPerson)
+        .then(response => {
+          setPersons(persons.map(person => person.id !== id ? person : response.data))
+          console.log('updated', person.name, id)
+        }).catch(error => {
+          alert(`${person.name} was deleted from persons`)
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
-  const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLocaleLowerCase()))
+  const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <div>
