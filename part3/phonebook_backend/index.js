@@ -4,6 +4,15 @@ const morgan = require('morgan')
 
 app.use(express.json())
 
+// https://github.com/expressjs/morgan#creating-new-tokens
+morgan.token('body', (req) => JSON.stringify(req.body))
+
+app.use(
+    morgan(':method :url :status :res[content-length] - :response-time ms :body', {
+        skip: (req) => req.method !== 'POST',
+    })
+)
+
 // https://github.com/expressjs/morgan
 app.use(morgan('tiny'))
 
