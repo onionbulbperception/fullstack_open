@@ -1,11 +1,12 @@
 const express = require('express')
-const app = express()
-const morgan = require('morgan')
 const cors = require('cors')
+const morgan = require('morgan')
+const path = require('path')
+
+const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static('dist'))
 
 // https://github.com/expressjs/morgan#creating-new-tokens
 morgan.token('body', (req) => JSON.stringify(req.body))
@@ -90,11 +91,23 @@ app.post('/api/persons', (request, response) => {
     response.json(newPerson)
 })
 
+app.use(express.static(path.join(__dirname, 'dist')))
+ 
+app.get('*', (request, response) => {
+    response.sendFile(path.join(__dirname, 'dist', 'index.html'))
+})
+
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
+})
+
+app.use(express.static(path.join(__dirname, 'dist')))
+
+app.get('*', (request, response) => {
+    response.sendFile(path.join(__dirname, 'dist', index.html))
 })
 
 const PORT = process.env.PORT || 3001
