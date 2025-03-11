@@ -94,7 +94,8 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+#dist
+part3/phonebook_frontend/dist
 
 # Gatsby files
 .cache/
