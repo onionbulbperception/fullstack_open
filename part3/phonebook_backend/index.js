@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 
 // https://github.com/expressjs/morgan#creating-new-tokens
 morgan.token('body', (req) => JSON.stringify(req.body))
