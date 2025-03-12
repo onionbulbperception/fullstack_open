@@ -1,6 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const path = require('path')
+
+const Person = require('./models/person')
+const person = require('./models/person')
 
 const app = express()
 
@@ -18,50 +22,27 @@ app.use(
 // https://github.com/expressjs/morgan
 app.use(morgan('tiny'))
 
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]  
-
-app.get('/info', (request, response) => {
-    const date = new Date()
-    response.send(`
-        <p>Phonebook has info for  ${persons.length} people</p>
-        <p>${date}</p>    
-    `)
-})
+//app.get('/info', (request, response) => {
+//    const date = new Date()
+//    response.send(`
+//        <p>Phonebook has info for  ${persons.length} people</p>
+//        <p>${date}</p>    
+//    `)
+//})
 
 app.get('/api/persons', (request, response) => {
+    Person.find({})
+        .then((persons) => {
+            console.log('Person list:', persons)
+        })
     response.json(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.json(person)
-      } else {
-        response.status(404).end()
-      }
+    Person.findById(request.params.id)
+        .then(person => {
+            responce.json(person)
+        })
 })
 
 app.post('/api/persons', (request, response) => {
@@ -73,20 +54,17 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    if (persons.find(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const newPerson = {
-        id: String(Math.floor(Math.random() * 1000)),
+    const person = new Person({
         name: body.name,
         number: body.number,
-    }
+    })
 
-    persons = persons.concat(newPerson)
-    response.json(newPerson)
+    person
+        .save()
+        .then(savedPerson => {
+            console.log('Added new person:', savedPerson)
+            response.json(savedPerson)
+        })
 })
 
 app.use(express.static(path.join(__dirname, 'dist')))
@@ -95,20 +73,14 @@ app.get('*', (request, response) => {
     response.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
+//app.delete('/api/persons/:id', (request, response) => {
+//    const id = request.params.id
+//    persons = persons.filter(person => person.id !== id)
+//
+//    response.status(204).end()
+//})
 
-    response.status(204).end()
-})
-
-app.use(express.static(path.join(__dirname, 'dist')))
-
-app.get('*', (request, response) => {
-    response.sendFile(path.join(__dirname, 'dist', index.html))
-})
-
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
