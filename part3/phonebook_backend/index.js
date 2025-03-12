@@ -34,8 +34,8 @@ app.get('/api/persons', (request, response) => {
     Person.find({})
         .then((persons) => {
             console.log('Person list:', persons)
+            response.json(persons)
         })
-    response.json(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
