@@ -83,6 +83,27 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch((error) => next(error))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+    const {name, number} = request.body
+    const updatePerson = { name, number }
+
+    // https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate()
+    // options: Return the modified document, validate against the model's schema, 
+    Person.findByIdAndUpdate(
+        request.params.id,
+        updatePerson,
+        { new: true, runValidators: true, context: 'query' }
+    )
+        .then((result) => {
+            if (result) {
+                response.json(result)
+            } else {
+                response.status(404).json({ error: 'Person not found' })
+            }
+        })
+        .catch((error) => next(error))
+})
+
 // Error handling
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
