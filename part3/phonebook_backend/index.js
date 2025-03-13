@@ -22,28 +22,35 @@ app.use(
 // https://github.com/expressjs/morgan
 app.use(morgan('tiny'))
 
-//app.get('/info', (request, response) => {
-//    const date = new Date()
-//    response.send(`
-//        <p>Phonebook has info for  ${persons.length} people</p>
-//        <p>${date}</p>    
-//    `)
-//})
-
-app.get('/api/persons', (request, response) => {
-    Person.find({})
-        .then((persons) => {
-            console.log('Person list:', persons)
-            response.json(persons)
+app.get('/info', (request, response, next) => {
+    // https://www.mongodb.com/docs/manual/reference/method/db.collection.countDocuments/
+    Person.countDocuments({})
+        .then((count) => {
+            response.send(`
+                <p>Phonebook has info for  ${count} people</p>
+                <p>${new Date()}</p>
+            `)  
         })
+})
+
+app.get('/api/persons', (request, response, next) => {
+    Person.find({})
+        .then((person) => {
+            response.json(person)
+        })
+        .catch((error) => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
-        .then(person => {
-            response.json(person)
+        .then((person) => {
+            if (person) {
+                response.json(person)
+            } else {
+                response.status(404).json({ error: 'person not found' })
+            }
         })
-        .catch(error => next(error))
+        .catch((error) => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
