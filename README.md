@@ -8,6 +8,7 @@ This repository contains the exercises completed as part of the Full Stack Open 
 1. Introduction to React
 2. Communicating with server
 3. Programming a server with NodeJS and Express
+4. Testing Express servers, user administration
 
 ## File structure:
 
@@ -24,7 +25,11 @@ This repository contains the exercises completed as part of the Full Stack Open 
 |   ├── countries/                         # Contains tasks 2.18 - 2.19
 |   ├── courseinfo/                        # Contains tasks 2.1 - 2.5
 |   └── phonebook/                         # Contains tasks 2.6 - 2.17
-    
+|-- part3/                                 # Directory that contains tasks from part 3
+|   ├── phonebook_backend/                 # Contains tasks 3.1 - 3.18
+|   ├── phonebook_frontend/                # Contains tasks 3.10 - 3.18
+|   └── README.md                          # Contains link to the deployed fullstack
+|-- part4/                                 # Directory that contains tasks from part 4
 ```
 
 ---
