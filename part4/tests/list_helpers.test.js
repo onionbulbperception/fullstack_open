@@ -64,11 +64,14 @@ const listWithOneBlog = [
   }
 ]
 
-test('dummy returns one', () => {
-    const blogs = []    
-    const result = listHelper.dummy(blogs)
+describe('dummy test', () => {
 
-    assert.strictEqual(result, 1)
+  test('dummy returns one', () => {
+      const blogs = []    
+      const result = listHelper.dummy(blogs)
+
+      assert.strictEqual(result, 1)
+  })
 })
 
 describe('total likes', () => {
@@ -91,5 +94,35 @@ describe('total likes', () => {
       // 7 + 5 + 12 + 10 + 0 + 2 === 36
       assert.strictEqual(result, 36)
   })
+
+})
+
+describe('most likes', () => {
+
+test('of empty list is empty', () => {
+    const result = listHelper.favoriteBlog([])
+
+    assert.strictEqual(result, null)
+})
+
+test('when list has only one blog equls that blog', () => {
+    const result = listHelper.favoriteBlog(listWithOneBlog)
+    
+    assert.deepStrictEqual(result, {
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    })
+})
+
+test('return the most liked blog', () => {
+  const result = listHelper.favoriteBlog(blogs)
+  
+  assert.deepStrictEqual(result, {
+    title: "Canonical string reduction",
+    author: "Edsger W. Dijkstra",
+    likes: 12,
+  })
+})
 
 })
