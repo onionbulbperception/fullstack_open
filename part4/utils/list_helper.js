@@ -39,4 +39,23 @@ const mostLikes = (blogs) => {
     return _.maxBy(likes, 'likes')
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostLikes }
+const mostBlogs = (blogs) => {
+    if (!blogs.length) return null
+
+    // https://lodash.com/docs/4.17.15#countBy
+    const countAuthorsBlogs = _.countBy(blogs, 'author')
+    const authorWithMostBlogs = _.maxBy(Object.keys(countAuthorsBlogs), author => countAuthorsBlogs[author])
+
+    return {
+        author: authorWithMostBlogs,
+        blogs: countAuthorsBlogs[authorWithMostBlogs]
+    }
+}
+
+module.exports = { 
+    dummy, 
+    totalLikes, 
+    favoriteBlog, 
+    mostLikes, 
+    mostBlogs,
+}
