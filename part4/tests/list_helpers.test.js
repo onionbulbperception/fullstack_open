@@ -125,4 +125,28 @@ test('return the most liked blog', () => {
   })
 })
 
+test('of empty list is empty', () => {
+  const result = listHelper.mostLikes([])
+  
+  assert.deepStrictEqual(result, null)
+})
+
+test('when list has only one author returns that author', () => {
+  const result = listHelper.mostLikes(listWithOneBlog)
+  
+  assert.deepStrictEqual(result, {
+    author: "Edsger W. Dijkstra",
+    likes: 5,
+  })
+})
+
+test('return the most liked author', () => {
+  const result = listHelper.mostLikes(blogs)
+  
+  assert.deepStrictEqual(result, {
+    author: "Edsger W. Dijkstra",
+    likes: 17,
+  })
+})
+
 })
