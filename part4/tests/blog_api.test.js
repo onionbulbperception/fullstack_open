@@ -38,11 +38,32 @@ describe('blog list test', () => {
         assert(authors.includes('Tester Von Testeroff'))
       })
 
-      test(' the unique identifier property of the blog posts is named id', async () => {
+      test('the unique identifier property of the blog posts is named id', async () => {
         const response = await api.get('/api/blogs')
       
         assert(Object.keys(response.body[0]).includes('id'))
         assert(!Object.keys(response.body[0]).includes('_id'))
+      })
+
+      test('a valid blog can be added', async () => {
+        const newBlog = {
+          title: 'When Testing Hurts',
+          author: 'Testeressa Von Testeroff',
+          url: 'www.exampleURLThatIHopeDoesntWorkPart3.com',
+          likes: 100,
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
+
+        const response = await helper.blogsInDb()
+        assert.strictEqual(response.length, helper.initialBlogs.length + 1)
+
+        const title = response.map(r => r.title)
+        assert(title.includes(newBlog.title))
       })
 
       after(async () => {
