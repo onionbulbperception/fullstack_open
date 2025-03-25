@@ -5,6 +5,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
+const { response } = require('express')
 
 const api = supertest(app)
 
@@ -66,7 +67,59 @@ describe('blog list test', () => {
         assert(title.includes(newBlog.title))
       })
 
-      after(async () => {
-        await mongoose.connection.close()
+      test('if the likes property is missing, it will default to the value 0', async () => {
+        const blogNoLikes = {
+          title: 'When Likes are missing',
+          author: 'Tester Von Testeroff',
+          url: 'www.exampleURLThatIHopeDoesntWorkPart4.com',
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(blogNoLikes)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
+
+        const response = await helper.blogsInDb()
+        const result = response.find((blog =>
+          blog.title === 'When Likes are missing'
+        ))
+
+        assert.strictEqual(result.likes, 0)
       })
+
+      test('if the title property is missing, it will return 400', async () => {
+        const blogNoTitle = {
+          author: 'Tester Von Testeroff',
+          url: 'www.exampleURLThatIHopeDoesntWorkPart4.com',
+          likes: 10,
+        }
+
+        await api
+          .post("/api/blogs")
+          .send(blogNoTitle)
+          .expect(400)
+
+        const result = await helper.blogsInDb()
+
+        assert.strictEqual(result.length, helper.initialBlogs.length)
+      })
+
+      test('if the url property is missing, it will return 400', async () => {
+        const blogNoURL = {
+          title: 'When URL missing',
+          author: 'Tester Von Testeroff',
+          likes: 10,
+        }
+
+        await api
+          .post("/api/blogs")
+          .send(blogNoURL)
+          .expect(400)
+
+        const result = await helper.blogsInDb()
+
+        assert.strictEqual(result.length, helper.initialBlogs.length)
+      })
+
 })
