@@ -51,7 +51,7 @@ const blogs = [
       likes: 2,
       __v: 0
     }  
-  ]
+]
 
 const listWithOneBlog = [
   {
