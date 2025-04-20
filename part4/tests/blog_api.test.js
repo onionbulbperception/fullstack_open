@@ -146,6 +146,23 @@ describe('deletion of a blog', () => {
   })
 })
 
+describe('update a blog', () => {
+  test('update a blog\'s likes by id', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updateLikes = blogToUpdate.likes + 1
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send({ likes: updateLikes })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(response.body.likes, updateLikes)
+  })
+})
+
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
