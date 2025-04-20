@@ -29,7 +29,7 @@ This repository contains the exercises completed as part of the Full Stack Open 
 |   ├── phonebook_backend/                 # Contains tasks 3.1 - 3.18
 |   ├── phonebook_frontend/                # Contains tasks 3.10 - 3.18
 |   └── README.md                          # Contains link to the deployed fullstack
-|-- part4/                                 # Directory that contains tasks from part 4
+|-- part4/                                 # Directory that contains tasks from part 4 (Contains tasks 4.1-4.15 & 4.17-4.19)
 ```
 
 ---
