@@ -15,6 +15,7 @@ const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
@@ -215,6 +216,7 @@ describe('when there is initially one user in db', () => {
     
         assert.strictEqual(usersAtEnd.length, usersAtStart.length)
       })
+
 })
 
 after(async () => {
