@@ -15,6 +15,7 @@ const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
@@ -128,6 +129,41 @@ describe('blog list test', () => {
 
 })
 
+describe('deletion of a blog', () => {
+  test('succeeds with code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+
+    const contents = blogsAtEnd.map(r => r.title)
+    assert(!contents.includes(blogToDelete.title))
+  })
+})
+
+describe('update a blog', () => {
+  test('update a blog\'s likes by id', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updateLikes = blogToUpdate.likes + 1
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send({ likes: updateLikes })
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(response.body.likes, updateLikes)
+  })
+})
+
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
@@ -180,4 +216,10 @@ describe('when there is initially one user in db', () => {
     
         assert.strictEqual(usersAtEnd.length, usersAtStart.length)
       })
+
+})
+
+after(async () => {
+  await User.deleteMany({})
+  await mongoose.connection.close()
 })
