@@ -11,6 +11,8 @@ const User = require('../models/user')
 describe('users', () => {
   beforeEach(async () => {
     await User.deleteMany({})
+    const user = new User({ username: 'initialuser', name: 'Initial User', passwordHash: 'hashedpassword' })
+    await user.save()
   })
 
   test('a valid user can be added', async () => {

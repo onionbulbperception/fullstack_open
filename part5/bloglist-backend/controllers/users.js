@@ -13,7 +13,7 @@ router.post('/', async (request, response) => {
     return response.status(400).json({ error: 'password missing or too short' })
   }
 
-  const existingUser = await User.findOne({ username })
+  const existingUser = await User.findOne({ username: username.toLowerCase() })
   if (existingUser) {
     return response.status(400).json({ error: 'Username must be unique' })
   }
@@ -22,7 +22,7 @@ router.post('/', async (request, response) => {
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const user = new User({
-    username,
+    username: username.toLowerCase(),
     name,
     passwordHash,
   })
